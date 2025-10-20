@@ -10,7 +10,7 @@ async def sign_new_user(data: User) -> dict:
     if data.email in users:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="Use with supplied username exists"
+            detail="User with supplied username exists"
         )
     users[data.email] = data
     return{
@@ -19,7 +19,7 @@ async def sign_new_user(data: User) -> dict:
 
 @user_router.post("/signin")
 async def sign_user_in(user: UserSignIn) -> dict:
-    if users[user.email] not in users:
+    if user.email not in users:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User does not exist"
@@ -27,7 +27,7 @@ async def sign_user_in(user: UserSignIn) -> dict:
     if users[user.email].password != user.password:
         raise HTTPException(
             status_code = status.HTTP_403_FORBIDDEN,
-            details="Wrong credentials passed"
+            detail="Wrong credentials passed"
         )
     return {
         "message": "User signed in successfully"
