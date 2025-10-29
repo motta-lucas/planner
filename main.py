@@ -10,8 +10,13 @@ from database.connection import Settings
 
 shared_resources = {}
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await settings.initialize_database()
+    yield
 
-app = FastAPI()
+
+app = FastAPI(lifespan=lifespan)
 
 #Register routes
 
@@ -20,9 +25,10 @@ settings = Settings()
 app.include_router(user_router, prefix="/user")
 app.include_router(event_router,prefix="/event")
 
-@app.on_event("startup")
-async def init_db():
-    await settings.initialize_database()
+
+#@app.on_event("startup")
+#async def init_db():
+#    await settings.initialize_database()
 
 
 @app.get("/")
