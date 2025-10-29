@@ -1,7 +1,11 @@
 from fastapi import APIRouter, HTTPException, status
 from models.users import User, UserSignIn
 
+from database.connection import Database
+
 user_router = APIRouter(tags=["User"])
+
+user_database = Database(User)
 
 users = {}
 
@@ -19,16 +23,18 @@ async def sign_new_user(data: User) -> dict:
 
 @user_router.post("/signin")
 async def sign_user_in(user: UserSignIn) -> dict:
-    if user.email not in users:
+    user_exist = await User.find_onde(User.email == user.email)
+    if not user_exist:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User does not exist"
         )
-    if users[user.email].password != user.password:
-        raise HTTPException(
-            status_code = status.HTTP_403_FORBIDDEN,
-            detail="Wrong credentials passed"
-        )
-    return {
-        "message": "User signed in successfully"
-    }
+    if user_exist.password == user.password:
+        return {
+            "message": "User signed in successfully"
+        }
+    raise HTTPException(
+        status_code = status.HTTP_401_UNAUTHORIZED,
+        detail="Invalid details passed"
+    )
+    
