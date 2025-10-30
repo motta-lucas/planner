@@ -15,6 +15,8 @@ DOTENV = os.path.join(os.path.dirname(__file__), ".env")
 class Settings(BaseSettings):
     DATABASE_URL: Optional[str] = None
 
+    SECRET_KEY: Optional[str] = None
+
     async def initialize_database(self):
         client = AsyncIOMotorClient(self.DATABASE_URL)
         await init_beanie(

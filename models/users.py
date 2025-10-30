@@ -8,7 +8,6 @@ from models.events import Event
 class User(Document):
     email: EmailStr
     password: str
-    events: Optional[List[Link[Event]]] = None
 
     class Settings:
         name = "users"
@@ -17,8 +16,7 @@ class User(Document):
         json_schema_extra = {
             "example": {
             "email": "fastapi@packt.com",
-            "password": "strong!!!",
-            "events": [],
+            "password": "strong!!!"
             }
         }
 
@@ -34,3 +32,7 @@ class UserSignIn(BaseModel):
             }]
         }
     )
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str
