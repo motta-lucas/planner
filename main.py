@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
+from fastapi.middleware.cors import CORSMiddleware
+
 from routes.users import user_router
 from routes.events import event_router
 import uvicorn
@@ -7,6 +9,8 @@ import uvicorn
 from contextlib import asynccontextmanager
 
 from database.connection import Settings
+
+origins = ["*"]
 
 shared_resources = {}
 
@@ -17,6 +21,14 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials = True,
+    allow_methods = ["*"],
+    allow_headers=["*"],
+)
 
 #Register routes
 
