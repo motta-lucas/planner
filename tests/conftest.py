@@ -10,7 +10,7 @@ from models.users import User
 
 @pytest.fixture(scope="session")
 def event_loop():
-    loop = asyncio.get_event_loop()
+    loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
     loop.close()
 
@@ -29,4 +29,4 @@ async def default_client():
         yield client
         # Clean up resources
         await Event.find_all().delete()
-        await User.find_all().delete()
+        # await User.find_all().delete()
