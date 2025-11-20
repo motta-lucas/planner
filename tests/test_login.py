@@ -1,6 +1,5 @@
 import httpx
 import pytest
-import uuid  # Import the uuid library
 
 
 @pytest.mark.asyncio

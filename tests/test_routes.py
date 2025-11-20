@@ -2,7 +2,7 @@ import httpx
 import pytest
 
 from auth.jwt_handler import create_access_token
-from models.events import Event, EventUpdate
+from models.events import Event
 
 from typing import AsyncGenerator
 
